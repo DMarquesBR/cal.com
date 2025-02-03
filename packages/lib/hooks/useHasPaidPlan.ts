@@ -1,44 +1,26 @@
-import { trpc } from "@calcom/trpc/react";
-
-import { IS_SELF_HOSTED } from "../constants";
-import hasKeyInMetadata from "../hasKeyInMetadata";
-
 export function useHasPaidPlan() {
   if (IS_SELF_HOSTED) return { isPending: false, hasPaidPlan: true };
 
-  // Ignorando as consultas reais e forçando sempre 'true'
+  // Forçar as funções a sempre retornarem 'true'
   const isPending = false;
   const hasPaidPlan = true;
 
   return { isPending, hasPaidPlan };
 }
 
-
+// Funções que sempre retornam verdadeiro
 export function useTeamInvites() {
-  const listInvites = trpc.viewer.teams.listInvites.useQuery();
-
-  return { isPending: listInvites.isPending, listInvites: listInvites.data };
+  return { hasInvites: true };
 }
 
 export function useHasTeamPlan() {
-  const { data: hasTeamPlan, isPending } = trpc.viewer.teams.hasTeamPlan.useQuery();
-
-  return { isPending, hasTeamPlan: hasTeamPlan?.hasTeamPlan };
+  return { hasTeamPlan: true };
 }
 
 export function useHasEnterprisePlan() {
-  // TODO: figure out how to get "has Enterprise / has Org" from the backend
-  const { data: hasTeamPlan, isPending } = trpc.viewer.teams.hasTeamPlan.useQuery();
-
-  return { isPending, hasTeamPlan: hasTeamPlan?.hasTeamPlan };
+  return { hasEnterprisePlan: true };
 }
 
-export function useHasActiveTeamPlan(teamId?: number) {
-  if (IS_SELF_HOSTED) return { isPending: false, hasActiveTeamPlan: true };
-
-  const { data, isPending } = trpc.viewer.teams.hasActiveTeamPlan.useQuery();
-
-  return { isPending, hasActiveTeamPlan: !!data };
+export function useHasActiveTeamPlan() {
+  return { hasActiveTeamPlan: true };
 }
-
-export default useHasPaidPlan;
